@@ -1,53 +1,188 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Sportnote</title>
-    <link rel="stylesheet" href="css/styles.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sportnote</title>
+  <style>
+    body {
+      background-color: #121a12;
+      color: #a1d99b;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 20px;
+      transition: background-color 0.4s, color 0.4s;
+    }
+
+    .logo {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #7fff00;
+      text-shadow: 0 0 8px #4caf50;
+      user-select: none;
+      margin-bottom: 5px;
+    }
+    .logo-sub {
+      font-size: 1rem;
+      color: #4caf50;
+      letter-spacing: 3px;
+      user-select: none;
+      margin-top: -10px;
+      margin-bottom: 30px;
+    }
+
+    .workout-counter {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #2e7d32;
+      border: none;
+      color: #c8facc;
+      padding: 10px 18px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+      margin-right: 8px;
+      margin-bottom: 20px;
+    }
+    button:hover {
+      background-color: #4caf50;
+      box-shadow: 0 0 10px #7fff00;
+    }
+
+    .container {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .notes-section {
+      flex: 1 1 400px;
+      background-color: #203420;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #336633;
+      min-width: 300px;
+    }
+
+    #textBoxes {
+      margin-bottom: 15px;
+    }
+
+    .human-section {
+      flex: 1 1 300px;
+      background-color: #203420;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #336633;
+      min-width: 250px;
+      text-align: center;
+      user-select: none;
+    }
+
+    .human {
+      width: 150px;
+      height: 300px;
+      margin: 0 auto 15px auto;
+      background: linear-gradient(180deg, #4caf50 0%, #2e7d32 100%);
+      border-radius: 15px;
+      box-shadow: 0 0 10px #7fff00 inset;
+    }
+
+    .status-text {
+      font-size: 1.2rem;
+      color: #a1d99b;
+      font-weight: 600;
+    }
+
+    .overlay {
+      display: none; /* если используется */
+    }
+
+    .rename-dialog {
+      background-color: #203420;
+      color: #a1d99b;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px #4caf50;
+      max-width: 350px;
+      margin: 0 auto;
+      display: none;
+    }
+
+    .rename-input {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #4caf50;
+      background-color: #121a12;
+      color: #c8facc;
+      font-size: 16px;
+      outline: none;
+      margin-bottom: 10px;
+    }
+
+    #successMessage {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #225522;
+      padding: 15px 25px;
+      border-radius: 10px;
+      color: #a1d99b;
+      font-weight: 700;
+      font-size: 1.2rem;
+      box-shadow: 0 0 12px #7fff00;
+      user-select: none;
+      z-index: 1000;
+    }
+  </style>
 </head>
 <body>
-    <div class="logo">
-        Sport Note
-        <div class="logo-sub">SPORTWITHNOTE</div>
+  <div class="logo">
+    Sport Note
+    <div class="logo-sub">SPORTWITHNOTE</div>
+  </div>
+  
+  <div class="workout-counter" id="workoutCounter">
+    Тренировок сохранено: 0
+  </div>
+  
+  <button id="themeToggle">Переключить тему</button>
+  <button id="scanQRBtn">📷 Сканировать QR</button>
+  <button id="qrGeneratorBtn">📝 Генератор QR</button>
+  <button id="addRowBtn" style="display:none;">➕ Добавить упражнение</button>
+  
+  <div class="container">
+    <div class="notes-section">
+      <div id="textBoxes"></div>
+      <button id="saveBtn">🏋️ Сохранить тренировку</button>
     </div>
-
-    <div class="workout-counter" id="workoutCounter">
-        Тренировок сохранено: 0
+    
+    <div class="human-section">
+      <div class="human" id="humanFigure"></div>
+      <div class="status-text" id="statusText">Не выполнено</div>
     </div>
+  </div>
 
-    <button id="themeToggle">Переключить тему</button>
-    <button id="scanQRBtn">📷 Сканировать QR</button>
-    <button id="addRowBtn" style="display:none;">➕ Добавить упражнение</button>
+  <div class="overlay" id="overlay"></div>
+  <div class="rename-dialog" id="renameDialog">
+    <h3>Переименовать упражнение</h3>
+    <input type="text" class="rename-input" id="renameInput" />
+    <button id="confirmRename">Сохранить</button>
+    <button id="cancelRename">Отмена</button>
+  </div>
 
-    <div class="container">
-        <div class="notes-section">
-            <div id="textBoxes"></div>
-            <button id="saveBtn">🏋️ Сохранить тренировку</button>
-        </div>
+  <div class="success-message" id="successMessage">
+    Ты молодец!<br />Тренировка прошла хорошо!
+  </div>
 
-        <div class="human-section">
-            <div class="human" id="humanFigure"></div>
-            <div class="status-text" id="statusText">Не выполнено</div>
-        </div>
-    </div>
-
-    <!-- Видео для превью камеры -->
-    <video id="preview" style="width: 100%; max-width: 400px; margin-top: 15px; display:none;"></video>
-
-    <div class="overlay" id="overlay"></div>
-    <div class="rename-dialog" id="renameDialog">
-        <h3>Переименовать упражнение</h3>
-        <input type="text" class="rename-input" id="renameInput" />
-        <button id="confirmRename">Сохранить</button>
-        <button id="cancelRename">Отмена</button>
-    </div>
-
-    <div class="success-message" id="successMessage">
-        Ты молодец!<br />Тренировка прошла хорошо!
-    </div>
-
-    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
-    <script src="js/app.js"></script>
+  <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>

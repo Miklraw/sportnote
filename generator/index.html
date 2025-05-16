@@ -9,35 +9,29 @@
       background-color: #121a12;
       color: #a1d99b;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      padding: 20px;
-      margin: 0;
-      min-height: 100vh;
+      margin: 20px;
     }
     h1 {
-      margin-bottom: 20px;
       color: #7fff00;
       text-shadow: 0 0 5px #4caf50;
     }
+    #exerciseContainer {
+      margin-bottom: 15px;
+    }
     .exercise-input {
-      margin-bottom: 12px;
       display: flex;
       gap: 10px;
-      align-items: center;
+      margin-bottom: 10px;
     }
-    input {
-      background-color: #203420;
-      border: 1px solid #4caf50;
-      border-radius: 4px;
-      padding: 10px;
-      color: #c8facc;
+    input[type="text"] {
       flex: 1;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #4caf50;
+      background-color: #203420;
+      color: #c8facc;
       font-size: 16px;
       outline: none;
-      transition: border-color 0.3s ease;
-    }
-    input:focus {
-      border-color: #7fff00;
-      box-shadow: 0 0 8px #7fff00;
     }
     button {
       background-color: #2e7d32;
@@ -45,59 +39,91 @@
       color: #c8facc;
       padding: 10px 18px;
       font-size: 16px;
-      border-radius: 5px;
+      border-radius: 6px;
       cursor: pointer;
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
-      user-select: none;
+      transition: background-color 0.3s ease;
     }
     button:hover {
       background-color: #4caf50;
-      box-shadow: 0 0 10px #7fff00;
     }
     #qrCode {
-      margin-top: 25px;
-      display: flex;
-      justify-content: center;
-    }
-    #goToWorkoutBtn {
-      margin-bottom: 25px;
-      background-color: #145214;
-      font-weight: bold;
-      font-size: 18px;
-      box-shadow: 0 0 6px #2ecc40;
-    }
-    #goToWorkoutBtn:hover {
-      background-color: #2ecc40;
-      color: #121a12;
-      box-shadow: 0 0 12px #2ecc40;
+      margin-top: 20px;
+      background: #203420;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px #4caf50;
+      display: inline-block;
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
 </head>
 <body>
   <h1>Генератор QR для SportNote</h1>
-
-  <button id="goToWorkoutBtn">Тренировка</button>
-
+  
   <div id="exerciseContainer">
     <div class="exercise-input">
       <input type="text" placeholder="Название упражнения" class="exercise-name" />
       <input type="text" placeholder="Значение (опционально)" class="exercise-value" />
-      <button onclick="addExercise()">+</button>
+      <button id="addExerciseBtn">+</button>
     </div>
   </div>
-
-  <button onclick="generateQR()">Сгенерировать QR</button>
-
+  
+  <button id="generateQRBtn">Сгенерировать QR</button>
+  <button id="toWorkoutBtn" style="margin-left: 10px;">🏋️ Тренировка</button>
+  
   <div id="qrCode"></div>
-
+  
   <script>
-    document.getElementById('goToWorkoutBtn').addEventListener('click', () => {
-      window.location.href = '../index.html';
+    const exerciseContainer = document.getElementById('exerciseContainer');
+    const addExerciseBtn = document.getElementById('addExerciseBtn');
+    const generateQRBtn = document.getElementById('generateQRBtn');
+    const qrCodeDiv = document.getElementById('qrCode');
+    const toWorkoutBtn = document.getElementById('toWorkoutBtn');
+
+    addExerciseBtn.addEventListener('click', () => {
+      const div = document.createElement('div');
+      div.className = 'exercise-input';
+      div.innerHTML = `
+        <input type="text" placeholder="Название упражнения" class="exercise-name" />
+        <input type="text" placeholder="Значение (опционально)" class="exercise-value" />
+        <button class="removeBtn">−</button>
+      `;
+      exerciseContainer.appendChild(div);
+
+      div.querySelector('.removeBtn').addEventListener('click', () => {
+        exerciseContainer.removeChild(div);
+      });
     });
 
-    const exerciseContainer = document.getElementById('exerciseContainer');
+    generateQRBtn.addEventListener('click', () => {
+      const exercises = [];
+      const names = document.querySelectorAll('.exercise-name');
+      const values = document.querySelectorAll('.exercise-value');
+      for(let i=0; i<names.length; i++){
+        const name = names[i].value.trim();
+        const value = values[i].value.trim();
+        if(name){
+          exercises.push(value ? `${name}: ${value}` : name);
+        }
+      }
+      if(exercises.length === 0){
+        alert('Добавьте хотя бы одно упражнение');
+        return;
+      }
+      const data = exercises.join('\n');
+      qrCodeDiv.innerHTML = '';
+      QRCode.toCanvas(data, { width: 200 }, function (error, canvas) {
+        if (error) {
+          alert('Ошибка генерации QR: ' + error);
+          return;
+        }
+        qrCodeDiv.appendChild(canvas);
+      });
+    });
 
-    function addExercise() {
-      const div = document.createElement('div');
-      div.className = '
+    toWorkoutBtn.addEventListener('click', () => {
+      window.location.href = '../index.html';
+    });
+  </script>
+</body>
+</html>
