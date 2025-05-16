@@ -1,25 +1,17 @@
-document.getElementById("scanQRBtn").addEventListener("click", function () {
-    const qrReader = document.getElementById("qr-reader");
-    qrReader.style.display = "block";
+document.addEventListener('DOMContentLoaded', function () {
+    const themeToggle = document.getElementById('themeToggle');
+    const saveBtn = document.getElementById('saveBtn');
+    const successMessage = document.getElementById('successMessage');
 
-    const html5QrCode = new Html5Qrcode("qr-reader");
+    themeToggle.addEventListener('click', function () {
+        document.body.classList.toggle('dark-theme');
+    });
 
-    const qrCodeSuccessCallback = (decodedText, decodedResult) => {
-        alert("QR-код считан: " + decodedText);
-        html5QrCode.stop().then(() => {
-            qrReader.style.display = "none";
-        });
-    };
-
-    const config = { fps: 10, qrbox: 250 };
-
-    html5QrCode.start(
-        { facingMode: "environment" },
-        config,
-        qrCodeSuccessCallback
-    ).catch(err => {
-        alert("Ошибка доступа к камере: " + err);
-        console.error("Ошибка QR: ", err);
-        qrReader.style.display = "none";
+    saveBtn.addEventListener('click', function () {
+        // Здесь может быть логика сохранения, например в localStorage
+        successMessage.classList.add('show');
+        setTimeout(() => {
+            successMessage.classList.remove('show');
+        }, 3000);
     });
 });
