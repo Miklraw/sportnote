@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sportnote</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="logo">
+    Sport Note
+    <div class="logo-sub">SPORTWITHNOTE</div>
+  </div>
+  
+  <div class="workout-counter" id="workoutCounter">
+    Тренировок сохранено: 0
+  </div>
+  
+  <button id="themeToggle">Переключить тему</button>
+  <button id="scanQRBtn">📷 Сканировать QR</button>
+  <button id="addRowBtn" style="display:none;">➕ Добавить упражнение</button>
+  
+  <div class="container">
+    <div class="notes-section">
+      <div id="textBoxes"></div>
+      <button id="saveBtn">🏋️ Сохранить тренировку</button>
+    </div>
+    
+    <div class="human-section">
+      <div class="human" id="humanFigure"></div>
+      <div class="status-text" id="statusText">Не выполнено</div>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+  <div class="rename-dialog" id="renameDialog">
+    <h3>Переименовать упражнение</h3>
+    <input type="text" class="rename-input" id="renameInput">
+    <button id="confirmRename">Сохранить</button>
+    <button id="cancelRename">Отмена</button>
+  </div>
+
+  <div class="success-message" id="successMessage">
+    Ты молодец!<br>Тренировка прошла хорошо!
+  </div>
+
+  <!-- Видео-поток камеры для QR -->
+  <div id="qr-video-container" style="display:none;">
+    <video id="preview" autoplay playsinline></video>
+  </div>
+
+  <!-- Подключаем Instascan -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/instascan/1.0.0/instascan.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

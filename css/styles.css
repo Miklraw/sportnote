@@ -1,0 +1,26 @@
+body {
+  font-family: sans-serif;
+  margin: 20px;
+  background: #f9f9f9;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.logo-sub {
+  font-size: 14px;
+  color: #888;
+}
+
+#qr-video-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#qr-video-container video {
+  width: 90%;
+  max-width: 400px;
+  border: 2px solid #333;
+}
