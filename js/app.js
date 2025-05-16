@@ -1,61 +1,48 @@
-document.addEventListener('DOMContentLoaded', () => {
-  let scanner = null;
-  const scanBtn = document.getElementById('scanQRBtn');
-  const stopBtn = document.getElementById('stopScanBtn');
-  const scannerContainer = document.getElementById('scannerContainer');
-  const videoElem = document.getElementById('preview');
-
-  scanBtn.addEventListener('click', () => {
-    if(scanner) return; // уже запущен
-    scanner = new Instascan.Scanner({ video: videoElem });
-
-    scanner.addListener('scan', content => {
-      alert('Считано: ' + content);
-      stopScanner();
-      // Здесь можно обработать QR содержимое, напр. добавить тренировку
-    });
-
-    Instascan.Camera.getCameras()
-      .then(cameras => {
-        if (cameras.length === 0) {
-          alert('Камеры не найдены');
-          return;
-        }
-
-        // Пытаемся найти заднюю камеру
-        let backCamera = cameras.find(camera =>
-          camera.name.toLowerCase().includes('back') ||
-          camera.name.toLowerCase().includes('rear') ||
-          camera.id.toLowerCase().includes('back') ||
-          camera.id.toLowerCase().includes('rear')
-        );
-
-        let selectedCamera = backCamera || cameras[0];
-
-        scanner.start(selectedCamera).then(() => {
-          scannerContainer.style.display = 'block';
-          scanBtn.style.display = 'none';
-          stopBtn.style.display = 'inline-block';
-        }).catch(e => {
-          alert('Ошибка запуска камеры: ' + e);
-          scanner = null;
-        });
-      }).catch(e => {
-        alert('Ошибка получения камер: ' + e);
+let scanner;
+document.getElementById("themeToggle").addEventListener("click", () => {
+  document.body.classList.toggle("dark-theme");
+});
+document.getElementById("saveBtn").addEventListener("click", () => {
+  document.getElementById("successMessage").style.display = "block";
+});
+document.getElementById("scanQRBtn").addEventListener("click", () => {
+  document.getElementById("scannerContainer").style.display = "block";
+  scanner = new Instascan.Scanner({ video: document.getElementById("preview"), mirror: false });
+  scanner.addListener("scan", function (content) {
+    const data = JSON.parse(content);
+    if (Array.isArray(data)) {
+      data.forEach((exercise) => {
+        addExerciseRow(exercise.name, exercise.value);
       });
-  });
-
-  stopBtn.addEventListener('click', () => {
-    stopScanner();
-  });
-
-  function stopScanner() {
-    if(scanner) {
-      scanner.stop();
-      scanner = null;
     }
-    scannerContainer.style.display = 'none';
-    scanBtn.style.display = 'inline-block';
-    stopBtn.style.display = 'none';
+    scanner.stop();
+    document.getElementById("scannerContainer").style.display = "none";
+  });
+  Instascan.Camera.getCameras().then((cameras) => {
+    if (cameras.length > 1) {
+      scanner.start(cameras[1]); // задняя камера
+    } else if (cameras.length > 0) {
+      scanner.start(cameras[0]);
+    } else {
+      alert("Камера не найдена");
+    }
+  });
+});
+document.getElementById("stopScanBtn").addEventListener("click", () => {
+  if (scanner) {
+    scanner.stop();
+    document.getElementById("scannerContainer").style.display = "none";
   }
+});
+function addExerciseRow(name = "", value = "") {
+  const container = document.getElementById("textBoxes");
+  const row = document.createElement("div");
+  row.innerHTML = \`
+    <input type="text" value="\${name}" placeholder="Упражнение">
+    <input type="text" value="\${value}" placeholder="Значение">
+  \`;
+  container.appendChild(row);
+}
+document.getElementById("addRowBtn").addEventListener("click", () => {
+  addExerciseRow();
 });
