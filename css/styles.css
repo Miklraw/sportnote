@@ -3,6 +3,8 @@ body {
     background-color: #fff;
     color: #000;
     transition: background-color 0.3s, color 0.3s;
+    margin: 0;
+    padding: 20px;
 }
 
 body.dark-theme {
@@ -34,4 +36,12 @@ button {
 
 .success-message.show {
     display: block;
+}
+
+/* Видео превью камеры */
+#preview {
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background: #000;
+    display: none; /* скрываем пока не запускаем камеру */
 }

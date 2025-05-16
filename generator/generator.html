@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Генератор QR для SportNote</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    .exercise-input {
+      margin-bottom: 10px;
+    }
+    input {
+      padding: 8px;
+      margin-right: 10px;
+      width: 200px;
+    }
+    button {
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    #qrCode {
+      margin-top: 20px;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+</head>
+<body>
+  <h1>Генератор QR для SportNote</h1>
+
+  <div id="exerciseContainer">
+    <div class="exercise-input">
+      <input type="text" placeholder="Название упражнения" class="exercise-name" />
+      <input type="text" placeholder="Значение (опционально)" class="exercise-value" />
+      <button onclick="addExercise()">+</button>
+    </div>
+  </div>
+
+  <button onclick="generateQR()">Сгенерировать QR</button>
+
+  <div id="qrCode"></div>
+
+  <script>
+    const exerciseContainer = document.getElementById('exerciseContainer');
+
+    function addExercise() {
+      const div = document.createElement('div');
+      div.className = 'exercise-input';
+      div.innerHTML = `
+        <input type="text" placeholder="Название упражнения" class="exercise-name" />
+        <input type="text" placeholder="Значение (опционально)" class="exercise-value" />
+        <button onclick="removeExercise(this)">−</button>
+      `;
+      exerciseContainer.appendChild(div);
+    }
+
+    function removeExercise(btn) {
+      btn.parentElement.remove();
+    }
+
+    function generateQR() {
+      const exercises = [];
+      const names = document.querySelectorAll('.exercise-name');
+      const values = document.querySelectorAll('.exercise-value');
+
+      for (let i = 0; i < names.length; i++) {
+        const name = names[i].value.trim();
+        const value = values[i].value.trim();
+        if (name) {
+          exercises.push({ name, value });
+        }
+      }
+
+      if (exercises.length === 0) {
+        alert('Добавьте хотя бы одно упражнение');
+        return;
+      }
+
+      const data = JSON.stringify(exercises);
+      const qrCodeDiv = document.getElementById('qrCode');
+      qrCodeDiv.innerHTML = '';
+
+      QRCode.toCanvas(data, { width: 256 }, function (error, canvas) {
+        if (error) {
+          alert('Ошибка генерации QR');
+          console.error(error);
+          return;
+        }
+        qrCodeDiv.appendChild(canvas);
+      });
+    }
+  </script>
+</body>
+</html>
