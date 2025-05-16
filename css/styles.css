@@ -24,3 +24,18 @@ body {
   max-width: 400px;
   border: 2px solid #333;
 }
+
+.qr-generator-btn {
+    display: inline-block;
+    padding: 10px 15px;
+    font-size: 16px;
+    margin-left: 10px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.qr-generator-btn:hover {
+    background-color: #45a049;
+}
