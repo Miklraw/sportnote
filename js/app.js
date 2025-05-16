@@ -1,29 +1,25 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const scanBtn = document.getElementById('scanQRBtn');
-  const videoContainer = document.getElementById('qr-video-container');
-  const video = document.getElementById('preview');
+document.getElementById("scanQRBtn").addEventListener("click", function () {
+    const qrReader = document.getElementById("qr-reader");
+    qrReader.style.display = "block";
 
-  let scanner = new Instascan.Scanner({ video: video });
+    const html5QrCode = new Html5Qrcode("qr-reader");
 
-  scanner.addListener('scan', function (content) {
-    alert('QR-код: ' + content);
-    scanner.stop();
-    videoContainer.style.display = 'none';
-  });
+    const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+        alert("QR-код считан: " + decodedText);
+        html5QrCode.stop().then(() => {
+            qrReader.style.display = "none";
+        });
+    };
 
-  scanBtn.addEventListener('click', () => {
-    Instascan.Camera.getCameras().then(function (cameras) {
-      if (cameras.length > 0) {
-        // Найдём камеру с именем, в котором есть 'back' (для iPhone)
-        const backCamera = cameras.find(c => c.name && c.name.toLowerCase().includes('back')) || cameras[0];
-        scanner.start(backCamera);
-        videoContainer.style.display = 'block';
-      } else {
-        alert('Камера не найдена.');
-      }
-    }).catch(function (e) {
-      console.error(e);
-      alert('Ошибка доступа к камере: ' + e);
+    const config = { fps: 10, qrbox: 250 };
+
+    html5QrCode.start(
+        { facingMode: "environment" },
+        config,
+        qrCodeSuccessCallback
+    ).catch(err => {
+        alert("Ошибка доступа к камере: " + err);
+        console.error("Ошибка QR: ", err);
+        qrReader.style.display = "none";
     });
-  });
 });
