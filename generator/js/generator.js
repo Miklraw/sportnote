@@ -42,15 +42,13 @@ function generateQR() {
 
     const jsonStr = JSON.stringify(exercises);
 
-    const qrContainer = document.getElementById('qrCode');
-    qrContainer.innerHTML = ''; // очистить
-
-    QRCode.toCanvas(jsonStr, { width: 256 }, function (err, canvas) {
+    const canvas = document.getElementById('qrCanvas');
+    QRCode.toCanvas(canvas, jsonStr, { width: 256 }, function (err) {
         if (err) {
             console.error(err);
             alert("Ошибка генерации QR-кода");
             return;
         }
-        qrContainer.appendChild(canvas);
+        console.log("QR-код успешно сгенерирован");
     });
 }
