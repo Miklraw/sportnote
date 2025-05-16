@@ -10,15 +10,17 @@
       color: #a6dba0;
       font-family: Arial, sans-serif;
       padding: 20px;
+      text-align: center;
     }
     button {
       background: #0b3a0f;
       color: #a6dba0;
       border: none;
-      padding: 10px 15px;
-      margin: 5px;
+      padding: 10px 20px;
+      margin: 10px;
       cursor: pointer;
-      border-radius: 4px;
+      border-radius: 6px;
+      font-size: 16px;
     }
     #scannerContainer {
       margin-top: 20px;
@@ -27,16 +29,21 @@
     #preview {
       width: 100%;
       max-width: 400px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px #1f3f1f;
+      border-radius: 10px;
+      box-shadow: 0 0 12px #1f3f1f;
     }
   </style>
 </head>
 <body>
 
   <h1>Sportnote</h1>
+
   <button id="scanQRBtn">📷 Сканировать QR</button>
   <button id="stopScanBtn" style="display:none;">⏹ Выключить скан</button>
+  <br>
+  <a href="generator/index.html" target="_blank">
+    <button>🧩 Генератор QR</button>
+  </a>
 
   <div id="scannerContainer">
     <video id="preview"></video>
