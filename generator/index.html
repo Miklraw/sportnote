@@ -1,29 +1,103 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Генератор QR для SportNote</title>
-    <link rel="stylesheet" href="css/generator.css">
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Генератор QR для SportNote</title>
+  <style>
+    body {
+      background-color: #121a12;
+      color: #a1d99b;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 20px;
+      margin: 0;
+      min-height: 100vh;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #7fff00;
+      text-shadow: 0 0 5px #4caf50;
+    }
+    .exercise-input {
+      margin-bottom: 12px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    input {
+      background-color: #203420;
+      border: 1px solid #4caf50;
+      border-radius: 4px;
+      padding: 10px;
+      color: #c8facc;
+      flex: 1;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+    input:focus {
+      border-color: #7fff00;
+      box-shadow: 0 0 8px #7fff00;
+    }
+    button {
+      background-color: #2e7d32;
+      border: none;
+      color: #c8facc;
+      padding: 10px 18px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+    }
+    button:hover {
+      background-color: #4caf50;
+      box-shadow: 0 0 10px #7fff00;
+    }
+    #qrCode {
+      margin-top: 25px;
+      display: flex;
+      justify-content: center;
+    }
+    #goToWorkoutBtn {
+      margin-bottom: 25px;
+      background-color: #145214;
+      font-weight: bold;
+      font-size: 18px;
+      box-shadow: 0 0 6px #2ecc40;
+    }
+    #goToWorkoutBtn:hover {
+      background-color: #2ecc40;
+      color: #121a12;
+      box-shadow: 0 0 12px #2ecc40;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
 </head>
 <body>
-    <h1>Генератор QR для SportNote</h1>
-    
-    <div id="exerciseContainer">
-        <div class="exercise-input">
-            <input type="text" placeholder="Название упражнения" class="exercise-name">
-            <input type="text" placeholder="Значение (опционально)" class="exercise-value">
-            <button onclick="addExercise()">+</button>
-        </div>
+  <h1>Генератор QR для SportNote</h1>
+
+  <button id="goToWorkoutBtn">Тренировка</button>
+
+  <div id="exerciseContainer">
+    <div class="exercise-input">
+      <input type="text" placeholder="Название упражнения" class="exercise-name" />
+      <input type="text" placeholder="Значение (опционально)" class="exercise-value" />
+      <button onclick="addExercise()">+</button>
     </div>
-    
-    <button onclick="generateQR()">Сгенерировать QR</button>
-    
-    <div id="qrCode">
-        <canvas id="qrCanvas"></canvas>
-    </div>
-    
-    <script src="js/generator.js"></script>
-</body>
-</html>
+  </div>
+
+  <button onclick="generateQR()">Сгенерировать QR</button>
+
+  <div id="qrCode"></div>
+
+  <script>
+    document.getElementById('goToWorkoutBtn').addEventListener('click', () => {
+      window.location.href = '../index.html';
+    });
+
+    const exerciseContainer = document.getElementById('exerciseContainer');
+
+    function addExercise() {
+      const div = document.createElement('div');
+      div.className = '
