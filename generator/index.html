@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор QR для SportNote</title>
+    <link rel="stylesheet" href="css/generator.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+</head>
+<body>
+    <h1>Генератор QR для SportNote</h1>
+    
+    <div id="exerciseContainer">
+        <div class="exercise-input">
+            <input type="text" placeholder="Название упражнения" class="exercise-name">
+            <input type="text" placeholder="Значение (опционально)" class="exercise-value">
+            <button onclick="addExercise()">+</button>
+        </div>
+    </div>
+    
+    <button onclick="generateQR()">Сгенерировать QR</button>
+    
+    <div id="qrCode"></div>
+    
+    <script src="js/generator.js"></script>
+</body>
+</html>
