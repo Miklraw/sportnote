@@ -4,37 +4,32 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Sportnote</title>
+  <link rel="stylesheet" href="css/styles.css" />
   <style>
     body {
       background-color: #121a12;
       color: #a1d99b;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 20px;
-      transition: background-color 0.4s, color 0.4s;
     }
-
     .logo {
-      font-size: 2.5rem;
-      font-weight: bold;
+      font-size: 2rem;
+      font-weight: 700;
       color: #7fff00;
-      text-shadow: 0 0 8px #4caf50;
-      user-select: none;
-      margin-bottom: 5px;
+      text-shadow: 0 0 5px #4caf50;
+      margin-bottom: 10px;
     }
     .logo-sub {
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: #4caf50;
-      letter-spacing: 3px;
-      user-select: none;
-      margin-top: -10px;
-      margin-bottom: 30px;
+      margin-top: -6px;
+      margin-left: 4px;
     }
-
     .workout-counter {
+      margin-bottom: 10px;
+      font-weight: 600;
       font-size: 1.1rem;
-      margin-bottom: 20px;
     }
-
     button {
       background-color: #2e7d32;
       border: none;
@@ -43,78 +38,32 @@
       font-size: 16px;
       border-radius: 6px;
       cursor: pointer;
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
-      user-select: none;
-      margin-right: 8px;
-      margin-bottom: 20px;
+      transition: background-color 0.3s ease;
+      margin-right: 10px;
+      margin-bottom: 10px;
     }
     button:hover {
       background-color: #4caf50;
-      box-shadow: 0 0 10px #7fff00;
     }
-
     .container {
       display: flex;
       gap: 20px;
       flex-wrap: wrap;
     }
-
-    .notes-section {
-      flex: 1 1 400px;
+    .notes-section, .human-section {
       background-color: #203420;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px #336633;
-      min-width: 300px;
-    }
-
-    #textBoxes {
-      margin-bottom: 15px;
-    }
-
-    .human-section {
-      flex: 1 1 300px;
-      background-color: #203420;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px #336633;
-      min-width: 250px;
-      text-align: center;
-      user-select: none;
-    }
-
-    .human {
-      width: 150px;
-      height: 300px;
-      margin: 0 auto 15px auto;
-      background: linear-gradient(180deg, #4caf50 0%, #2e7d32 100%);
-      border-radius: 15px;
-      box-shadow: 0 0 10px #7fff00 inset;
-    }
-
-    .status-text {
-      font-size: 1.2rem;
-      color: #a1d99b;
-      font-weight: 600;
-    }
-
-    .overlay {
-      display: none; /* если используется */
-    }
-
-    .rename-dialog {
-      background-color: #203420;
-      color: #a1d99b;
-      padding: 15px;
       border-radius: 10px;
-      box-shadow: 0 0 15px #4caf50;
-      max-width: 350px;
-      margin: 0 auto;
-      display: none;
+      padding: 15px;
+      flex: 1 1 400px;
+      box-shadow: 0 0 10px #4caf50;
     }
-
-    .rename-input {
-      width: 100%;
+    .exercise-input {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    input[type="text"] {
+      flex: 1;
       padding: 8px;
       border-radius: 6px;
       border: 1px solid #4caf50;
@@ -122,28 +71,37 @@
       color: #c8facc;
       font-size: 16px;
       outline: none;
-      margin-bottom: 10px;
     }
-
-    #successMessage {
-      display: none;
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: #225522;
-      padding: 15px 25px;
+    #preview {
+      width: 100%;
+      max-width: 400px;
       border-radius: 10px;
-      color: #a1d99b;
-      font-weight: 700;
+      margin-top: 10px;
+      display: none;
+      box-shadow: 0 0 10px #4caf50;
+    }
+    .status-text {
+      font-weight: 600;
       font-size: 1.2rem;
-      box-shadow: 0 0 12px #7fff00;
-      user-select: none;
-      z-index: 1000;
+      color: #a1d99b;
+      margin-top: 15px;
+    }
+    .success-message {
+      background-color: #2e7d32;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+      color: #c8facc;
+      font-weight: 700;
+      font-size: 1.3rem;
+      text-align: center;
+      box-shadow: 0 0 10px #4caf50;
+      display: none;
     }
   </style>
 </head>
 <body>
+
   <div class="logo">
     Sport Note
     <div class="logo-sub">SPORTWITHNOTE</div>
@@ -155,7 +113,9 @@
   
   <button id="themeToggle">Переключить тему</button>
   <button id="scanQRBtn">📷 Сканировать QR</button>
-  <button id="qrGeneratorBtn">📝 Генератор QR</button>
+  <button id="qrGeneratorBtn">🖊 Генератор QR</button>
+  <a href="generator/index.html" target="_blank">Открыть генератор QR (тест)</a>
+
   <button id="addRowBtn" style="display:none;">➕ Добавить упражнение</button>
   
   <div class="container">
@@ -170,19 +130,14 @@
     </div>
   </div>
 
-  <div class="overlay" id="overlay"></div>
-  <div class="rename-dialog" id="renameDialog">
-    <h3>Переименовать упражнение</h3>
-    <input type="text" class="rename-input" id="renameInput" />
-    <button id="confirmRename">Сохранить</button>
-    <button id="cancelRename">Отмена</button>
-  </div>
+  <video id="preview" autoplay></video>
 
   <div class="success-message" id="successMessage">
-    Ты молодец!<br />Тренировка прошла хорошо!
+    Ты молодец!<br>Тренировка прошла хорошо!
   </div>
 
   <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
   <script src="js/app.js"></script>
+  
 </body>
 </html>

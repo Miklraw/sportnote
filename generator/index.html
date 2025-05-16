@@ -103,16 +103,16 @@
         const name = names[i].value.trim();
         const value = values[i].value.trim();
         if(name){
-          exercises.push(value ? `${name}: ${value}` : name);
+          exercises.push({ name, value });
         }
       }
       if(exercises.length === 0){
         alert('Добавьте хотя бы одно упражнение');
         return;
       }
-      const data = exercises.join('\n');
+      const dataJSON = JSON.stringify(exercises);
       qrCodeDiv.innerHTML = '';
-      QRCode.toCanvas(data, { width: 200 }, function (error, canvas) {
+      QRCode.toCanvas(dataJSON, { width: 200 }, function (error, canvas) {
         if (error) {
           alert('Ошибка генерации QR: ' + error);
           return;
