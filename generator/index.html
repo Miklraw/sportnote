@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Генератор QR для SportNote</title>
-  <link rel="stylesheet" href="../css/styles.css" />
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Генератор QR для SportNote</title>
+    <link rel="stylesheet" href="css/generator.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
 </head>
 <body>
-  <h1>Генератор QR для SportNote</h1>
-  <button onclick="window.location.href='../index.html'">🏋️ Тренировка</button>
-  <div id="exerciseContainer">
-    <div class="exercise-input">
-      <input type="text" placeholder="Название упражнения" class="exercise-name">
-      <input type="text" placeholder="Значение (опционально)" class="exercise-value">
-      <button onclick="addExercise()">+</button>
+    <h1>Генератор QR для SportNote</h1>
+    <div id="exerciseContainer">
+        <div class="exercise-input">
+            <input type="text" placeholder="Название упражнения" class="exercise-name">
+            <input type="text" placeholder="Значение (опционально)" class="exercise-value">
+            <button onclick="addExercise()">+</button>
+        </div>
     </div>
-  </div>
-  <button onclick="generateQR()">Сгенерировать QR</button>
-  <div id="qrCode"></div>
-  <script src="generator.js"></script>
+    <button onclick="generateQR()">Сгенерировать QR</button>
+    <div id="qrCode"></div>
+    <br>
+    <a href="../index.html" class="gen-link">🏋️ Тренировка</a>
+    <script src="js/generator.js"></script>
 </body>
 </html>

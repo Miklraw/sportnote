@@ -1,54 +1,28 @@
-// Добавить упражнение
 function addExercise() {
     const container = document.getElementById('exerciseContainer');
     const div = document.createElement('div');
     div.className = 'exercise-input';
-    div.innerHTML = \`
-        <input type="text" placeholder="Название упражнения" class="exercise-name">
-        <input type="text" placeholder="Значение (опционально)" class="exercise-value">
-        <button onclick="removeExercise(this)">−</button>
-    \`;
+    div.innerHTML = '<input type="text" placeholder="Название упражнения" class="exercise-name"> <input type="text" placeholder="Значение (опционально)" class="exercise-value">';
     container.appendChild(div);
 }
 
-// Удалить упражнение
-function removeExercise(button) {
-    const div = button.parentElement;
-    div.remove();
-}
-
-// Генерация QR-кода
 function generateQR() {
     const names = document.querySelectorAll('.exercise-name');
     const values = document.querySelectorAll('.exercise-value');
-
-    const exercises = [];
+    const data = [];
 
     for (let i = 0; i < names.length; i++) {
         const name = names[i].value.trim();
         const value = values[i].value.trim();
         if (name) {
-            exercises.push({
-                name: name,
-                value: value || null
-            });
+            data.push({ name, value });
         }
     }
 
-    if (exercises.length === 0) {
-        alert("Введите хотя бы одно упражнение");
-        return;
-    }
-
-    const jsonStr = JSON.stringify(exercises);
-
-    const canvas = document.getElementById('qrCanvas');
-    QRCode.toCanvas(canvas, jsonStr, { width: 256 }, function (err) {
-        if (err) {
-            console.error(err);
-            alert("Ошибка генерации QR-кода");
-            return;
-        }
-        console.log("QR-код успешно сгенерирован");
+    const qrCodeContainer = document.getElementById('qrCode');
+    qrCodeContainer.innerHTML = '';
+    QRCode.toCanvas(document.createElement('canvas'), JSON.stringify(data), function (err, canvas) {
+        if (err) console.error(err);
+        qrCodeContainer.appendChild(canvas);
     });
 }
